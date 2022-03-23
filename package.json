@@ -1,0 +1,31 @@
+{
+  "name": "vue_boilerplate",
+  "version": "1.0.0",
+  "description": "Vue template",
+  "main": "vite.config.js",
+  "scripts": {
+    "dev": "vite --mode development",
+    "build": "vite build --mode production",
+    "preview": "vite preview --host"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lstubdal/vue_boilerplate.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/lstubdal/vue_boilerplate/issues"
+  },
+  "homepage": "https://github.com/lstubdal/vue_boilerplate#readme",
+  "dependencies": {
+    "vue": "^3.2.29",
+    "vue-router": "^4.0.12",
+    "vuex": "^4.0.2"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^2.2.0",
+    "@vue/compiler-sfc": "^3.2.31",
+    "vite": "^2.8.2"
+  }
+}
