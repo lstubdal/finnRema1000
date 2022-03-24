@@ -19,6 +19,7 @@
   },
   "homepage": "https://github.com/lstubdal/vue_boilerplate#readme",
   "dependencies": {
+    "mapbox-gl": "^2.7.1", 
     "vue": "^3.2.29",
     "vue-router": "^4.0.12",
     "vuex": "^4.0.2"
