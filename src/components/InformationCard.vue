@@ -5,7 +5,7 @@
         <section v-if="clicked" class="informationCard__content">
             <img src="/icons/close.svg" alt="close icon" class="informationCard__close" @click="displayInformation">
             <h2 class="informationCard__title">HVA GJØR DENNE NETTSIDEN?</h2>
-            <p class="informationCard__paragraph">Denne nettsiden  viser deg alle 660 Rema1000 butikker i hele Norge. </p>
+            <p class="informationCard__paragraph">Denne nettsiden  viser deg alle 661 Rema1000 butikker i hele Norge! </p>
             <p class="informationCard__paragraph">Ved å trykke/hovre over en stedstag vil informasjon om åpningstid, adresse og mail for mulighet til å kontakte butikken,  vises opp i et lite vindu (hover) og øverst på siden (klikk på tag)</p>
             <p class="informationCard__paragraph">Nettsiden bruker data fra <a href="https://apiportal.rema.no/" class="informationCard__paragraph--link">Rema1000 sitt API</a></p>
         </section>
