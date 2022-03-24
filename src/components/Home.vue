@@ -10,28 +10,43 @@
 
         <div class="dashboard__headline">
             <h1 class="dashboard__title"> {{ title }}</h1>
-            <span class="dashboard__line"></span>
+            <span class="dashboard__line"></span>   <!-- fix line from information -->
             <p class="dashboard__lead">{{ lead }}</p>
         </div>
 
         <main class="dashboard__main">
+            <h2 class="dashboard__storeName">{{ storeName }}</h2>
+
             <section class="storeInformation">
-                <div class="storeInformation__detail"> 
+                <div class="storeInformation__details"> 
                     <img src="/icons/location.svg" alt="location icon">
-                    <span class="storeInformation__address">Adresse:</span> 
+                    <span class="storeInformation__detail">Adresse:</span> 
                     <p class="storeInformation__text">{{ address }}</p>
                 </div>
 
-                <div class="storeInformation__detail">  
+                <div class="storeInformation__details">  
                     <img src="/icons/clock.svg" alt="clock icon">
-                    <span class="storeInformation__openingHours">Åpnignstider:</span>  
+                    <span class="storeInformation__detail">Åpnignstider:</span>  
                     <p class="storeInformation__text">{{ openingHours }}</p>
                 </div>
 
-                <div class="storeInformation__detail"> 
-                    <img src="/icons/mail.svg" alt="mail icon">
-                    <span class="storeInformation__mail">Mail:</span> 
-                    <p class="storeInformation__text">{{ mail }}</p>
+                <div class="storeInformation__details"> 
+                    <img src="/icons/phone.svg" alt="phone icon">
+                    <span class="storeInformation__detail">Phone:</span> 
+                    <p class="storeInformation__text">{{ phone }}</p>
+                </div>
+
+             <!--    <div class="storeInformation__details"> 
+                    <img src="/icons/website.svg" alt="website icon">
+                    <span class="storeInformation__detail">Website:</span>
+                    <a :href="websiteLink" class="storeInformation__text">Gå til nettside</a> 
+                    <p class="storeInformation__text">{{ websiteLink }}</p>
+                </div> -->
+
+                <div class="storeInformation__details"> 
+                    <img src="/icons/post.svg" alt="post icon">
+                    <span class="storeInformation__detail">Post in store:</span> 
+                    <p class="storeInformation__text">{{ postInStore }}</p>
                 </div>
             </section>
 
@@ -48,11 +63,14 @@
         data() {
             return {
                 title: 'Rema1000 oversikt',
-                lead: 'Her kan du finne alle Rema1000 butikker i Norge, samt adresse, åpningstid og mail',
+                lead: 'Her kan du finne alle Rema1000 butikker i Norge, samt adresse, dagens åpningstid og nummer',
                 mapbox_token: import.meta.env.VITE_MAPBOX_TOKEN,  // get token hidden token from .env.dev.
+                storeName: '',
                 address: '',
                 openingHours: '',
-                mail: '',
+                websiteLink: '',
+                phone: '',
+                postInStore: '',
                 storeData: [],
                 storeFeatures: []
             }
@@ -100,8 +118,8 @@
                         'properties': {
                             'name': store.name,
                             'address': store.visitAddress,
-                            'openingHours': store.openingHours,
-                            'nettside': store.detailUrl,
+                            'openingHours': store.openingHours.monday,
+                            'website': store.detailUrl,
                             'phone': store.phone,
                             'postInStore': store.postInStore,
                             'iconSize': [25, 31]
@@ -134,7 +152,12 @@
 
                     // show store data based on location of marker 
                     marker.addEventListener('click', () => {    
-                        window.alert('KLIKKET');
+                        this.storeName = store.properties.name;
+                        this.address = store.properties.address;
+                        this.openingHours = store.properties.openingHours;
+                        this.phone = store.properties.phone;
+                        this.websiteLink = store.properties.website;
+                        this.postInStore = store.properties.postInStore === 'false' ? 'Nei' : 'Ja';
                     });
 
                     // Add markers to the map.
@@ -203,11 +226,17 @@
         margin-top: var(--margin-medium);
     }
 
+    .dashboard__storeName {
+        font-size: 2.2em;
+        color: var(--main-color);
+        padding: var(--small);
+    }
+
     .storeInformation {
         display: flex;
     }
 
-    .storeInformation__detail {
+    .storeInformation__details {
         display: flex;
         flex-direction: column;
         justify-content: center;
@@ -215,12 +244,15 @@
         padding: var(--padding-large);
     }
 
-    .storeInformation__address, 
-    .storeInformation__openingHours, 
-    .storeInformation__mail {
+    .storeInformation__detail {
         font-size: 1.5em;
         font-weight: 200;
         padding: var(--padding-small);
+    }
+
+    .storeInformation__text {
+        font-size: 1.8em;
+        color: var(--main-color);
     }
 
     #map {
@@ -228,7 +260,6 @@
         height: 100vh;
         width: 80vw;
         margin-bottom: var(--margin-large);
-
     }
 
     .marker {
