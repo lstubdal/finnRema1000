@@ -25,7 +25,7 @@
                 </div>
 
                 <div class="storeInformation__details">  
-                    <img src="/icons/clock.svg" alt="clock icon">
+                    <img src="/icons/openingHours.svg" alt="openingHours icon">
                     <span class="storeInformation__detail">Åpnignstider:</span>  
                     <p class="storeInformation__text">{{ openingHours }}</p>
                 </div>
@@ -35,13 +35,6 @@
                     <span class="storeInformation__detail">Phone:</span> 
                     <p class="storeInformation__text">{{ phone }}</p>
                 </div>
-
-             <!--    <div class="storeInformation__details"> 
-                    <img src="/icons/website.svg" alt="website icon">
-                    <span class="storeInformation__detail">Website:</span>
-                    <a :href="websiteLink" class="storeInformation__text">Gå til nettside</a> 
-                    <p class="storeInformation__text">{{ websiteLink }}</p>
-                </div> -->
 
                 <div class="storeInformation__details"> 
                     <img src="/icons/post.svg" alt="post icon">
@@ -63,7 +56,7 @@
         data() {
             return {
                 title: 'Rema1000 oversikt',
-                lead: 'Her kan du finne alle Rema1000 butikker i Norge, samt adresse, dagens åpningstid og nummer',
+                lead: 'Her kan du finne alle Rema1000 butikker i Norge, samt adresse, dagens åpningstid og nummer. Klikk eller pek på en plasseringstag for å se informasjon',
                 mapbox_token: import.meta.env.VITE_MAPBOX_TOKEN,  // get token hidden token from .env.dev.
                 storeName: '',
                 address: '',
@@ -97,17 +90,18 @@
                 this.displayMap();
             },
 
-            displayMap() {
+            displayMap() {  
+                // source: https://docs.mapbox.com/mapbox-gl-js/example/simple-map/ 
                 mapboxgl.accessToken = this.mapbox_token;   // access token
-                const map = new mapboxgl.Map({
+                const map = new mapboxgl.Map({  
                     container: 'map', // container ID
-                    style: 'mapbox://styles/mapbox/streets-v11', // style URL
+                    style: 'mapbox://styles/mapbox/streets-v11',
                     center:  [11.9413731, 65.1928539], // starting position [lng, lat] 
-                    zoom: 5 //starting zoom
+                    zoom: 4 
                 });
 
                 this.createMarker(map);
-                // source: https://docs.mapbox.com/mapbox-gl-js/example/simple-map/ 
+                this.addUserLocation(map) // for user to see their location next to stores
             },
 
             createJsonObjects() {
@@ -122,7 +116,7 @@
                             'website': store.detailUrl,
                             'phone': store.phone,
                             'postInStore': store.postInStore,
-                            'iconSize': [25, 31]
+                            'iconSize': [30, 35]
                             },
                             'geometry': {
                                 'type': 'Point',
@@ -158,6 +152,8 @@
                         this.phone = store.properties.phone;
                         this.websiteLink = store.properties.website;
                         this.postInStore = store.properties.postInStore === 'false' ? 'Nei' : 'Ja';
+
+                        window.scrollTo(0,0); // scroll to top for user to se store data
                     });
 
                     // Add markers to the map.
@@ -166,6 +162,23 @@
                         .addTo(map);
                 })
                 // soruce: https://docs.mapbox.com/mapbox-gl-js/example/custom-marker-icons/ 
+            },
+
+            addUserLocation(map) {
+                // source: https://docs.mapbox.com/mapbox-gl-js/example/locate-user/
+                map.addControl(
+                    new mapboxgl.GeolocateControl({
+                    positionOptions: {
+                    enableHighAccuracy: true,
+                },
+
+                // When active the map will receive updates to the device's location as it changes.
+                trackUserLocation: true,
+
+                // Draw an arrow next to the location dot to indicate which direction the device is heading.
+                showUserHeading: true
+                })
+                );
             }
         }
     }
@@ -213,9 +226,9 @@
 
     .dashboard__lead {
         text-align: center;
-        font-size: 1.8em;
+        font-size: 1.7em;
         font-weight: 250;
-        padding: 1% 20%;
+        padding: 1% 25%;
     }
 
     .dashboard__main {
@@ -256,7 +269,7 @@
     }
 
     #map {
-        border-radius: var(--corner-radius);
+        border-radius: var(--map-corners);
         height: 100vh;
         width: 80vw;
         margin-bottom: var(--margin-large);
