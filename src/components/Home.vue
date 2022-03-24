@@ -115,7 +115,7 @@
                             'website': store.detailUrl,
                             'phone': store.phone,
                             'postInStore': store.postInStore,
-                            'iconSize': [30, 35]
+                            'iconSize': [24, 30]
                             },
                             'geometry': {
                                 'type': 'Point',
@@ -143,16 +143,18 @@
                     marker.style.height = `${height}px`;
                     marker.style.backgroundSize = '100%';
 
-                    // show store data based on location of marker 
-                    marker.addEventListener('click', () => {    
-                        this.storeName = store.properties.name;
-                        this.address = store.properties.address;
-                        this.openingHours = store.properties.openingHours;
-                        this.phone = store.properties.phone;
-                        this.websiteLink = store.properties.website;
-                        this.postInStore = store.properties.postInStore === 'false' ? 'Nei' : 'Ja';
+                    // update storedata when marker clicked
+                    marker.addEventListener('click', () => {
+                        this.onClickUpdateInfo(store);            
+                    });
 
-                        window.scrollTo(0,0); // scroll to top for user to se store data
+                    // show storedata card when marker hovered
+                    marker.addEventListener('mouseenter', () => {
+                        // source: https://docs.mapbox.com/mapbox-gl-js/example/popup/ 
+                        const popup = new mapboxgl.Popup({ closeOnClick: false })
+                            .setLngLat(store.geometry.coordinates)
+                            .setHTML(   `<h1>${store.properties.name}</h1>`)
+                            .addTo(map);    
                     });
 
                     // Add markers to the map.
@@ -161,6 +163,17 @@
                         .addTo(map);
                 })
                 // soruce: https://docs.mapbox.com/mapbox-gl-js/example/custom-marker-icons/ 
+            },
+
+            onClickUpdateInfo(store) {
+                this.storeName = store.properties.name;
+                this.address = store.properties.address;
+                this.openingHours = store.properties.openingHours;
+                this.phone = store.properties.phone;
+                this.websiteLink = store.properties.website;
+                this.postInStore = store.properties.postInStore === 'false' ? 'Nei' : 'Ja';
+
+                window.scrollTo(0,0); // scroll to top for user to se store data
             },
 
             addUserLocation(map) {
@@ -190,7 +203,6 @@
         flex-direction: column;
         align-items: center;
         font-family: var(--main-font);
-        
     }
 
     .dashboard__headline {
@@ -274,7 +286,8 @@
     }
 
     .map__text {
-        font-size: 1.5em;
+        font-size: 1.2em;
         color: var(--main-color);
+        margin-top: -3%;
     }
 </style>
