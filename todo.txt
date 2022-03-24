@@ -1,0 +1,7 @@
+- Add mapbox-gl CHECK
+- fetch data: CHECK
+- create custom marker check 
+- add popup/hover data
+- show regions button
+- din posisjon CHECK 
+- footer check 

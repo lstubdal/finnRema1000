@@ -1,13 +1,6 @@
 <template>
     <div class="dashboard">
-        <header class="header">
-            <RouterLink :to="{name: 'home' }">
-                <img src="/icons/logo.svg" alt="rema1000 logo">
-            </RouterLink>
-
-            <InformationCard />
-        </header>
-
+        <Header />
         <div class="dashboard__headline">
             <h1 class="dashboard__title"> {{ title }}</h1>
             <span class="dashboard__line"></span>   <!-- fix line from information -->
@@ -44,13 +37,17 @@
             </section>
 
             <div class="map" id="map"></div> <!-- shows map --> 
+            <span class="map__text">Klikk og dra for å gå rundt på kartet, og zoom inn/ut</span>
         </main>
+
+        <Footer />
     </div>
 </template>
 
 <script>
-    import InformationCard from '../components/InformationCard.vue';
+    import Header from '../components/Header.vue';
     import mapboxgl from 'mapbox-gl';
+    import Footer from '../components/Footer.vue'
 
     export default {
         data() {
@@ -74,7 +71,9 @@
         },
 
         components: {
-            InformationCard
+            Header,
+            Footer
+            
         },
 
         methods: {
@@ -138,7 +137,7 @@
                     const marker = document.createElement('div');
                     const width = store.properties.iconSize[0];
                     const height = store.properties.iconSize[1];
-                    marker.className = 'marker';
+                    marker.className = 'map__marker';
                     marker.style.backgroundImage = 'url(./icons/locationTag.svg)'
                     marker.style.width = `${width}px`; 
                     marker.style.height = `${height}px`;
@@ -194,15 +193,6 @@
         
     }
 
-    .header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        position: fixed;
-        width: 100vw;
-        padding: var(--padding-small);
-    }
-
     .dashboard__headline {
         display: flex;
         flex-direction: column;
@@ -214,7 +204,7 @@
     .dashboard__title {
         font-size: 2.7em;
         color: var(--dark);
-        font-weight: 150;
+        font-weight: 200;
     }
 
     .dashboard__line {
@@ -268,18 +258,23 @@
         color: var(--main-color);
     }
 
-    #map {
+    .map {
         border-radius: var(--map-corners);
         height: 100vh;
         width: 80vw;
         margin-bottom: var(--margin-large);
     }
 
-    .marker {
+    .map__marker {
         display: block;
         border: none;
         border-radius: 50%;
         cursor: pointer;
         padding: 0;
+    }
+
+    .map__text {
+        font-size: 1.5em;
+        color: var(--main-color);
     }
 </style>
