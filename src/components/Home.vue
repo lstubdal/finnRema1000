@@ -100,6 +100,7 @@
                 });
 
                 this.createMarker(map);
+                this.addZoomButtons(map); 
                 this.addUserLocation(map) // for user to see their location next to stores
             },
 
@@ -174,6 +175,10 @@
                 this.postInStore = store.properties.postInStore === 'false' ? 'Nei' : 'Ja';
 
                 window.scrollTo(0,0); // scroll to top for user to se store data
+            },
+
+            addZoomButtons(map) {
+                map.addControl(new mapboxgl.NavigationControl());
             },
 
             addUserLocation(map) {
