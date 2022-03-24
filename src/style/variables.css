@@ -1,0 +1,24 @@
+:root {
+
+    /* font */
+    --main-font: 'Roboto', sans-serif;
+
+    /* color */
+    --main-color: #EA2661;
+    --dark: black;
+    --light: white;
+
+    /* padding */
+    --padding-small: 10px;
+    --padding-medium: 30px;
+    --padding-large: 50px;
+
+    /* margin */
+    --margin-small: 10px;
+    --margin-medium: 30px;
+    --margin-large: 50px;
+    --margin-information: 90px;
+
+    /* radius */
+    --map-corners: 5px;
+}
