@@ -4,4 +4,9 @@
 - add popup/hover data
 - show regions button
 - din posisjon CHECK 
-- footer check 
+- footer check
+- responsive
+- opening hours fix
+- hover card - judith
+- seach og filterer butikker
+- set html => flere attributter

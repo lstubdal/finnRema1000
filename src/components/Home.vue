@@ -76,6 +76,36 @@
             
         },
 
+        computed: {
+            getCurrentDay() {
+                // get current day
+                let day = ''
+                switch(new Date().getDay()){
+                    case 0: {
+                        return day = 'sunday';
+                    }
+                    case 1: {
+                        return day = 'monday';
+                    }
+                    case 2: {
+                        return day = 'tuesday';
+                    }
+                    case 3: {
+                        return day = 'wednesday';
+                    }
+                    case 4: {
+                        return day = 'thursday';
+                    } 
+                    case 5: {
+                        return day = 'friday';
+                    }
+                    case 6: {
+                        return day = 'saturday';
+                    }
+                }
+            }
+        },
+
         methods: {
             async pageSetup() {
                 const urlWithProxy = `https://api.allorigins.win/get?url=${encodeURIComponent('https://rema.no/api/v2/stores')}`;   // using proxy to get pass CORS without authentication source: https://github.com/gnuns/allorigins  
@@ -84,6 +114,8 @@
 
                 const contentsAsObject = JSON.parse(contents)   // parse string to object to access array with store data
                 this.storeData = contentsAsObject.results  // save store data from api in array
+
+                this.getTodaysOpeningHour();
 
                 this.createJsonObjects();
                 this.displayMap();
@@ -112,7 +144,7 @@
                         'properties': {
                             'name': store.name,
                             'address': store.visitAddress,
-                            'openingHours': store.openingHours.monday,
+                            'openingHours': store.openingHours,
                             'website': store.detailUrl,
                             'phone': store.phone,
                             'postInStore': store.postInStore,
@@ -154,7 +186,7 @@
                         // source: https://docs.mapbox.com/mapbox-gl-js/example/popup/ 
                         const popup = new mapboxgl.Popup({ closeOnClick: false })
                             .setLngLat(store.geometry.coordinates)
-                            .setHTML(   `<h1>${store.properties.name}</h1>`)
+                            .setHTML(   `<h1>${store.properties.name}</h1>`) 
                             .addTo(map);    
                     });
 
@@ -169,13 +201,32 @@
             onClickUpdateInfo(store) {
                 this.storeName = store.properties.name;
                 this.address = store.properties.address;
-                this.openingHours = store.properties.openingHours;
+                this.openingHours = store.properties.openingHours;  
                 this.phone = store.properties.phone;
                 this.websiteLink = store.properties.website;
                 this.postInStore = store.properties.postInStore === 'false' ? 'Nei' : 'Ja';
 
                 window.scrollTo(0,0); // scroll to top for user to se store data
             },
+
+            getTodaysOpeningHour(){
+               
+            },
+
+            // how to use function properly?
+           /*  getTodaysOpeningHour() {
+                Object.values(this.storeData).forEach( store => {
+                    const getDay = Object.entries(store.openingHours) // convert openingHours object to array with arrays of days with openinghours to access them
+                
+                    let indexDay = 0
+                    while (indexDay < getDay.length) {
+                        if (getDay[indexDay][0] === this.getCurrentDay){
+                                return this.openingHours = getDay[indexDay][1];
+                        }
+                        indexDay++; 
+                    }
+                }) 
+            }, */
 
             addZoomButtons(map) {
                 map.addControl(new mapboxgl.NavigationControl());
@@ -188,12 +239,8 @@
                     positionOptions: {
                     enableHighAccuracy: true,
                 },
-
-                // When active the map will receive updates to the device's location as it changes.
                 trackUserLocation: true,
-
-                // Draw an arrow next to the location dot to indicate which direction the device is heading.
-                showUserHeading: true
+                showUserHeading: true   // show arrow for users direction
                 })
                 );
             }
