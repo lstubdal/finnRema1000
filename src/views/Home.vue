@@ -1,6 +1,5 @@
 <template>
     <div class="dashboard">
-        <Header />
         <div class="dashboard__headline">
             <h1 class="dashboard__title"> {{ title }}</h1>
             <span class="dashboard__line"></span>   <!-- fix line from information -->
@@ -45,9 +44,7 @@
 </template>
 
 <script>
-    import Header from '../components/Header.vue';
     import mapboxgl from 'mapbox-gl';
-    import Footer from '../components/Footer.vue'
 
     export default {
         data() {
@@ -70,15 +67,8 @@
             this.pageSetup();
         },
 
-        components: {
-            Header,
-            Footer
-            
-        },
-
         computed: {
             getCurrentDay() {
-                // get current day
                 let day = ''
                 switch(new Date().getDay()){
                     case 0: {
@@ -181,9 +171,10 @@
                         this.onClickUpdateInfo(store);            
                     });
 
-                    // show storedata card when marker hovered
+                    /* show storedata card when marker hovered -
+                     source: https://docs.mapbox.com/mapbox-gl-js/example/popup/ */
                     marker.addEventListener('mouseenter', () => {
-                        // source: https://docs.mapbox.com/mapbox-gl-js/example/popup/ 
+                        
                         const popup = new mapboxgl.Popup({ closeOnClick: false })
                             .setLngLat(store.geometry.coordinates)
                             .setHTML(   `<h1>${store.properties.name}</h1>`) 
