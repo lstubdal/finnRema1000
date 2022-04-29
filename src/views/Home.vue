@@ -99,8 +99,13 @@
         methods: {
             async pageSetup() {
                 const urlWithProxy = `https://api.allorigins.win/get?url=${encodeURIComponent('https://rema.no/api/v2/stores')}`;   // using proxy to get pass CORS without authentication source: https://github.com/gnuns/allorigins  
-                const response = await fetch(urlWithProxy);
-                const { contents} = await response.json();  // recieves all API data as a string
+                const options = {
+                    /* method: 'no-cors', */
+                    'Access-Control-Allow-Origin': '*'
+                };
+
+                const response = await fetch(urlWithProxy, options);
+                const { contents } = await response.json();  // recieves all API data as a string
 
                 const contentsAsObject = JSON.parse(contents)   // parse string to object to access array with store data
                 this.storeData = contentsAsObject.results  // save store data from api in array
