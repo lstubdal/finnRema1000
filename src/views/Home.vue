@@ -59,7 +59,8 @@
                 phone: '',
                 postInStore: '',
                 storeData: [],
-                storeFeatures: []
+                storeFeatures: [],
+
             }
         },
 
@@ -69,28 +70,29 @@
 
         computed: {
             getCurrentDay() {
-                let day = ''
+                let day = 0;
+
                 switch(new Date().getDay()){
                     case 0: {
-                        return day = 'sunday';
+                        return day = 0;
                     }
                     case 1: {
-                        return day = 'monday';
+                        return day = 1;
                     }
                     case 2: {
-                        return day = 'tuesday';
+                        return day = 2;
                     }
                     case 3: {
-                        return day = 'wednesday';
+                        return day = 3;
                     }
                     case 4: {
-                        return day = 'thursday';
+                        return day = 4;
                     } 
                     case 5: {
-                        return day = 'friday';
+                        return day = 5;
                     }
                     case 6: {
-                        return day = 'saturday';
+                        return day = 6;
                     }
                 }
             }
@@ -100,7 +102,6 @@
             async pageSetup() {
                 const urlWithProxy = `https://api.allorigins.win/get?url=${encodeURIComponent('https://rema.no/api/v2/stores')}`;   // using proxy to get pass CORS without authentication source: https://github.com/gnuns/allorigins  
                 const options = {
-                    /* method: 'no-cors', */
                     'Access-Control-Allow-Origin': '*'
                 };
 
@@ -109,8 +110,6 @@
 
                 const contentsAsObject = JSON.parse(contents)   // parse string to object to access array with store data
                 this.storeData = contentsAsObject.results  // save store data from api in array
-
-                this.getTodaysOpeningHour();
 
                 this.createJsonObjects();
                 this.displayMap();
@@ -154,7 +153,7 @@
             },
 
             createMarker(map) {
-                // store-json (aka geojson) iterate in feature array with json ojects created */
+                // store-json iterate in feature array with json ojects created */
                 const storeJson = {
                     'type': 'FeaturesCollection',
                     'features': this.storeFeatures
@@ -197,32 +196,17 @@
             onClickUpdateInfo(store) {
                 this.storeName = store.properties.name;
                 this.address = store.properties.address;
-                this.openingHours = store.properties.openingHours;  
+                this.openingHours = Object.values(store.properties.openingHours)[this.getCurrentDay];
                 this.phone = store.properties.phone;
                 this.websiteLink = store.properties.website;
                 this.postInStore = store.properties.postInStore === 'false' ? 'Nei' : 'Ja';
 
                 window.scrollTo(0,0); // scroll to top for user to se store data
-            },
-
-            getTodaysOpeningHour(){
                
-            },
+                console.log(Object.values(store.properties.openingHours)[this.getCurrentDay])
 
-            // how to use function properly?
-           /*  getTodaysOpeningHour() {
-                Object.values(this.storeData).forEach( store => {
-                    const getDay = Object.entries(store.openingHours) // convert openingHours object to array with arrays of days with openinghours to access them
                 
-                    let indexDay = 0
-                    while (indexDay < getDay.length) {
-                        if (getDay[indexDay][0] === this.getCurrentDay){
-                                return this.openingHours = getDay[indexDay][1];
-                        }
-                        indexDay++; 
-                    }
-                }) 
-            }, */
+            },
 
             addZoomButtons(map) {
                 map.addControl(new mapboxgl.NavigationControl());
@@ -234,10 +218,10 @@
                     new mapboxgl.GeolocateControl({
                     positionOptions: {
                     enableHighAccuracy: true,
-                },
-                trackUserLocation: true,
-                showUserHeading: true   // show arrow for users direction
-                })
+                    },
+                    trackUserLocation: true,
+                    showUserHeading: true   // show arrow for users direction
+                    })
                 );
             }
         }
@@ -337,5 +321,58 @@
         font-size: 1.2em;
         color: var(--main-color);
         margin-top: -3%;
+    }
+
+    @media screen and (max-width: 950px) {
+        .dashboard__title {
+            font-size: 2.2em;
+        }
+
+        .dashboard__line {
+            width: 600px
+        }
+
+        .dashboard__lead {
+            font-size: 1.3em;
+        }
+
+        .storeInformation__details {
+            padding: var(--padding-medium);
+        }
+
+        .storeInformation__detail {
+            font-size: 1.2em;
+        }
+
+        .storeInformation__text {
+            font-size: 1.5em;
+        }
+
+        .dashboard__storeName {
+            font-size: 1.7em;
+        }
+    }
+
+    @media screen and (max-width: 750px) {
+        .dashboard__line {
+            width: 400px;
+        }
+
+        .dashboard__lead, .storeInformation__text, .storeInformation__detail {
+            font-size: 1.1em;
+        }
+
+        .dashboard__storeName {
+            font-size: 1.4em;
+        }
+
+        .storeInformation__details {
+            padding: var(--padding-small);
+        }
+
+        .map__text {
+            font-size: 1em;
+        }
+        
     }
 </style>
