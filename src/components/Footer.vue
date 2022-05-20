@@ -26,9 +26,10 @@
         align-items: center;
         border-top: 2px solid var(--main-color);
         margin-top: var(--margin-large);
-        padding: var(--padding-small);
+        padding: var(--padding-medium);
         color: var(--second-color);
         background-color: var(--dark);
+        font-family: var(--main-font);
         font-size: 1.2em;
     }
 
@@ -40,6 +41,12 @@
     .footer__link:hover {
         color: var(--light);
         text-decoration: underline 1px solid var(--light);
+    }
+
+     @media screen and (max-width: 650px) {
+        .footer {
+            font-size: 1em;
+        }
     }
 
 </style>

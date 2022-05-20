@@ -10,7 +10,7 @@
                 <h2 class="header__information-title">HVA GJØR DENNE NETTSIDEN?</h2>
                 <p class="header__information-paragraph">Denne nettsiden  viser deg alle 661 Rema1000 butikker i hele Norge! </p>
                 <p class="header__information-paragraph">Ved å trykke/hovre over en stedstag vil informasjon om åpningstid, adresse og mail for mulighet til å kontakte butikken,  vises opp i et lite vindu (hover) og øverst på siden (klikk på tag)</p>
-                <p class="header__information-paragraph">Nettsiden bruker data fra <a href="https://apiportal.rema.no/" class="informationCard__paragraph--link">Rema1000 sitt API</a></p>
+                <p class="header__information-paragraph">Nettsiden bruker data fra <a href="https://apiportal.rema.no/" class="header__information-paragraph--link">Rema1000 sitt API</a></p>
             </section>
         </div>
     </header>
@@ -99,4 +99,13 @@
         color: var(--light);
     }
 
+    @media screen and (max-width: 950px) {
+        .header__information-title {
+            font-size: 1.8em;
+        }
+
+        .header__information-paragraph {
+            font-size: 1.3em;
+        }
+    }
 </style>
