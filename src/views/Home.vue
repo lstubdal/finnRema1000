@@ -51,7 +51,6 @@
             return {
                 title: 'Rema1000 oversikt',
                 lead: 'Her kan du finne alle Rema1000 butikker i Norge, samt adresse, dagens åpningstid og nummer. Klikk eller pek på en plasseringstag for å se informasjon',
-                mapbox_token: import.meta.env.VITE_MAPBOX_TOKEN,  // get token hidden token from .env.dev.
                 storeName: '',
                 address: '',
                 openingHours: '',
@@ -117,7 +116,8 @@
 
             displayMap() {  
                 // source: https://docs.mapbox.com/mapbox-gl-js/example/simple-map/ 
-                mapboxgl.accessToken = this.mapbox_token;   // access token
+                mapboxgl.accessToken = "pk.eyJ1IjoibHN0dWJkYWwiLCJhIjoiY2wwZ2ZpYmszMTJoMTNibnkxdGN5aHZwbCJ9.ykXNg8DZ6siiQwiqHZg6ng";   // access token
+                
                 const map = new mapboxgl.Map({  
                     container: 'map', // container ID
                     style: 'mapbox://styles/mapbox/streets-v11',
@@ -143,11 +143,11 @@
                             'phone': store.phone,
                             'postInStore': store.postInStore,
                             'iconSize': [24, 30]
-                        },
+                            },
                             'geometry': {
                                 'type': 'Point',
                                 'coordinates': [store.longitude, store.latitude]
-                        }
+                            }
                     }
                 })
             },
