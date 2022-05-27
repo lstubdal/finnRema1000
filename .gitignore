@@ -2,9 +2,8 @@ node_modules
 package-lock.json
 .vscode
 .DS_Store
-.idea
-.Thumbs.db
 *Trash
 .env.development
 .env.production
 .env
+dist

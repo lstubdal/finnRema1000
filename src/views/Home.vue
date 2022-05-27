@@ -143,11 +143,11 @@
                             'phone': store.phone,
                             'postInStore': store.postInStore,
                             'iconSize': [24, 30]
-                            },
+                        },
                             'geometry': {
                                 'type': 'Point',
                                 'coordinates': [store.longitude, store.latitude]
-                            }
+                        }
                     }
                 })
             },
