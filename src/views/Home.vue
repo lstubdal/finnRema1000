@@ -116,6 +116,9 @@
 
             displayMap() {  
                 // source: https://docs.mapbox.com/mapbox-gl-js/example/simple-map/ 
+                
+                console.log(import.meta.env.VITE_MAPBOX_TOKEN)
+                
                 mapboxgl.accessToken = "pk.eyJ1IjoibHN0dWJkYWwiLCJhIjoiY2wwZ2ZpYmszMTJoMTNibnkxdGN5aHZwbCJ9.ykXNg8DZ6siiQwiqHZg6ng";   // access token
                 
                 const map = new mapboxgl.Map({  
