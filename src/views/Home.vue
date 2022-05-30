@@ -281,25 +281,6 @@
         display: flex;
     }
 
-    .storeInformation__details {
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        padding: var(--padding-large);
-    }
-
-    .storeInformation__detail {
-        font-size: 1.5em;
-        font-weight: 200;
-        padding: var(--padding-small);
-    }
-
-    .storeInformation__text {
-        font-size: 1.8em;
-        color: var(--main-color);
-    }
-
     .map {
         border-radius: var(--map-corners);
         height: 100vh;
