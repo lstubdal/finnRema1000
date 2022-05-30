@@ -1,50 +1,30 @@
 <template>
     <div class="dashboard">
-        <div class="dashboard__headline">
+        <section class="dashboard__headline">
             <h1 class="dashboard__title"> {{ title }}</h1>
             <span class="dashboard__line"></span>   <!-- fix line from information -->
             <p class="dashboard__lead">{{ lead }}</p>
-        </div>
+        </section>
 
         <main class="dashboard__main">
             <h2 class="dashboard__storeName">{{ storeName }}</h2>
 
             <section class="storeInformation">
-                <div class="storeInformation__details"> 
-                    <img src="/icons/location.svg" alt="location icon">
-                    <span class="storeInformation__detail">Adresse:</span> 
-                    <p class="storeInformation__text">{{ address }}</p>
-                </div>
-
-                <div class="storeInformation__details">  
-                    <img src="/icons/openingHours.svg" alt="openingHours icon">
-                    <span class="storeInformation__detail">Åpnignstider:</span>  
-                    <p class="storeInformation__text">{{ openingHours }}</p>
-                </div>
-
-                <div class="storeInformation__details"> 
-                    <img src="/icons/phone.svg" alt="phone icon">
-                    <span class="storeInformation__detail">Phone:</span> 
-                    <p class="storeInformation__text">{{ phone }}</p>
-                </div>
-
-                <div class="storeInformation__details"> 
-                    <img src="/icons/post.svg" alt="post icon">
-                    <span class="storeInformation__detail">Post in store:</span> 
-                    <p class="storeInformation__text">{{ postInStore }}</p>
-                </div>
+                <StoreInformation :type="address" :imageSource="'/icons/location.svg'" :alterrnativeText="'location icon'" />
+                <StoreInformation :type="openingHours" :imageSource="'/icons/openingHours.svg'" :alterrnativeText="'clock icon'" />
+                <StoreInformation :type="phone" :imageSource="'/icons/phone.svg'" :alterrnativeText="'phone icon'" />
+                <StoreInformation :type="postInStore" :imageSource="'/icons/post.svg'" :alterrnativeText="'post icon'" />
             </section>
 
             <div class="map" id="map"></div> <!-- shows map --> 
             <span class="map__text">Klikk og dra for å gå rundt på kartet, og zoom inn/ut</span>
         </main>
-
-        <Footer />
     </div>
 </template>
 
 <script>
     import mapboxgl from 'mapbox-gl';
+    import StoreInformation from '../components/StoreInformation.vue';
 
     export default {
         data() {
@@ -59,18 +39,21 @@
                 postInStore: '',
                 storeData: [],
                 storeFeatures: [],
-
+                error: ''
             }
         },
 
-        created() {
+        async created() {
             this.pageSetup();
+        },
+
+        components: {
+            StoreInformation
         },
 
         computed: {
             getCurrentDay() {
                 let day = 0;
-
                 switch(new Date().getDay()){
                     case 0: {
                         return day = 0;
@@ -103,21 +86,36 @@
                 const options = {
                     'Access-Control-Allow-Origin': '*'
                 };
-
                 const response = await fetch(urlWithProxy, options);
-                const { contents } = await response.json();  // recieves all API data as a string
 
-                const contentsAsObject = JSON.parse(contents)   // parse string to object to access array with store data
-                this.storeData = contentsAsObject.results  // save store data from api in array
+                try {
+                    await this.responseHandeling(response);
+                } catch(error) {
+                    this.error = error.message;
+                }
 
                 this.createJsonObjects();
                 this.displayMap();
             },
 
-            displayMap() {  
-                // source: https://docs.mapbox.com/mapbox-gl-js/example/simple-map/ 
-                
-                // obs, don't hardcode mapbox key, but netlify couldn't find key. ( import.meta.env.VITE_MAPBOX_TOKEN )
+            async responseHandeling(response){
+                if (response.ok) {
+                    const { contents } = await response.json();  // recieves all API data as a string
+                    const contentsAsObject = JSON.parse(contents)   // parse string to object to access array with store data
+                    this.storeData = contentsAsObject.results  // save store data from api in array
+                } else {
+                    if (response.status === 404) {
+                        throw new Error("Can't find url")
+                    } else if (response.status === 500) {
+                        throw new Error("Server error")
+                    } else {
+                        throw new Error("something went wrong");
+                    }
+                }
+            },
+
+            displayMap() {      
+                // obs, don't hardcode mapbox key, but netlify couldn't find key. as 'import.meta.env.VITE_MAPBOX_TOKEN' 
                 mapboxgl.accessToken = "pk.eyJ1IjoibHN0dWJkYWwiLCJhIjoiY2wwZ2ZpYmszMTJoMTNibnkxdGN5aHZwbCJ9.ykXNg8DZ6siiQwiqHZg6ng";   // access token
                 
                 const map = new mapboxgl.Map({  
@@ -126,6 +124,7 @@
                     center:  [11.9413731, 65.1928539], // starting position [lng, lat] 
                     zoom: 4 
                 });
+                // source: https://docs.mapbox.com/mapbox-gl-js/example/simple-map/
 
                 this.createMarker(map);
                 this.addZoomButtons(map); 
@@ -145,11 +144,12 @@
                             'phone': store.phone,
                             'postInStore': store.postInStore,
                             'iconSize': [24, 30]
-                            },
-                            'geometry': {
-                                'type': 'Point',
-                                'coordinates': [store.longitude, store.latitude]
-                            }
+                        },
+
+                        'geometry': {
+                            'type': 'Point',
+                            'coordinates': [store.longitude, store.latitude]
+                        }
                     }
                 })
             },
@@ -203,11 +203,7 @@
                 this.websiteLink = store.properties.website;
                 this.postInStore = store.properties.postInStore === 'false' ? 'Nei' : 'Ja';
 
-                window.scrollTo(0,0); // scroll to top for user to se store data
-               
-                console.log(Object.values(store.properties.openingHours)[this.getCurrentDay])
-
-                
+                window.scrollTo(0,0); // scroll to top for user to se store data 
             },
 
             addZoomButtons(map) {
@@ -219,7 +215,7 @@
                 map.addControl(
                     new mapboxgl.GeolocateControl({
                     positionOptions: {
-                    enableHighAccuracy: true,
+                        enableHighAccuracy: true,
                     },
                     trackUserLocation: true,
                     showUserHeading: true   // show arrow for users direction
