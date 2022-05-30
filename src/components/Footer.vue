@@ -1,10 +1,10 @@
 <template>
-  <div class="footer">
+  <footer class="footer">
       <Logo />
       
       <p>Oversikt over alle Rema1000 i Norge</p>
       <a href="https://www.rema.no/" class="footer__link">Gå til hovednettside &#8599;</a>
-  </div>
+  </footer>
 </template>
 
 <script>
