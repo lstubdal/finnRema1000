@@ -10,10 +10,10 @@
             <h2 class="dashboard__storeName">{{ storeName }}</h2>
 
             <section class="storeInformation">
-                <StoreInformation :type="address" :imageSource="'/icons/location.svg'" :alterrnativeText="'location icon'" />
-                <StoreInformation :type="openingHours" :imageSource="'/icons/openingHours.svg'" :alterrnativeText="'clock icon'" />
-                <StoreInformation :type="phone" :imageSource="'/icons/phone.svg'" :alterrnativeText="'phone icon'" />
-                <StoreInformation :type="postInStore" :imageSource="'/icons/post.svg'" :alterrnativeText="'post icon'" />
+                <StoreInformation :informationType="'Adresse'" :informationData="address" :imageSource="'/icons/location.svg'" :alterrnativeText="'location icon'" />
+                <StoreInformation :informationType="'Åpningstider'" :informationData="openingHours" :imageSource="'/icons/openingHours.svg'" :alterrnativeText="'clock icon'" />
+                <StoreInformation :informationType="'Telefon'" :informationData="phone" :imageSource="'/icons/phone.svg'" :alterrnativeText="'phone icon'" />
+                <StoreInformation :informationType="'Post i butikk'" :informationData="postInStore" :imageSource="'/icons/post.svg'" :alterrnativeText="'post icon'" />
             </section>
 
             <div class="map" id="map"></div> <!-- shows map --> 
