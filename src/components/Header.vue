@@ -31,6 +31,7 @@
         },
         
         methods: {
+            // toggle varibale when clicked
             displayInformation() {
                 this.clicked = !this.clicked;
             }

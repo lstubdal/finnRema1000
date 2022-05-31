@@ -2,7 +2,7 @@
     <div class="dashboard">
         <section class="dashboard__headline">
             <h1 class="dashboard__title"> {{ title }}</h1>
-            <span class="dashboard__line"></span>   <!-- fix line from information -->
+            <span class="dashboard__line"></span>  
             <p class="dashboard__lead">{{ lead }}</p>
         </section>
 
@@ -82,10 +82,12 @@
 
         methods: {
             async pageSetup() {
-                const urlWithProxy = `https://api.allorigins.win/get?url=${encodeURIComponent('https://rema.no/api/v2/stores')}`;   // using proxy to get pass CORS without authentication source: https://github.com/gnuns/allorigins  
+                // using proxy  and options to get pass CORS without authentication source: https://github.com/gnuns/allorigins  
+                const urlWithProxy = `https://api.allorigins.win/get?url=${encodeURIComponent('https://rema.no/api/v2/stores')}`;   
                 const options = {
                     'Access-Control-Allow-Origin': '*'
                 };
+        
                 const response = await fetch(urlWithProxy, options);
 
                 try {
@@ -116,19 +118,19 @@
 
             displayMap() {      
                 // obs, don't hardcode mapbox key, but netlify couldn't find key. as 'import.meta.env.VITE_MAPBOX_TOKEN' 
-                mapboxgl.accessToken = "pk.eyJ1IjoibHN0dWJkYWwiLCJhIjoiY2wwZ2ZpYmszMTJoMTNibnkxdGN5aHZwbCJ9.ykXNg8DZ6siiQwiqHZg6ng";   // access token
+                mapboxgl.accessToken = "pk.eyJ1IjoibHN0dWJkYWwiLCJhIjoiY2wwZ2ZpYmszMTJoMTNibnkxdGN5aHZwbCJ9.ykXNg8DZ6siiQwiqHZg6ng";  
                 
+                /* New map with starting position with view of Norway
+                source: https://docs.mapbox.com/mapbox-gl-js/example/simple-map/ */
                 const map = new mapboxgl.Map({  
                     container: 'map', // container ID
                     style: 'mapbox://styles/mapbox/streets-v11',
-                    center:  [11.9413731, 65.1928539], // starting position [lng, lat] 
+                    center:  [11.9413731, 65.1928539],  
                     zoom: 4 
                 });
-                // source: https://docs.mapbox.com/mapbox-gl-js/example/simple-map/
 
                 this.createMarker(map);
                 this.addZoomButtons(map); 
-                this.addUserLocation(map) // for user to see their location next to stores
             },
 
             createJsonObjects() {
@@ -180,7 +182,6 @@
                     /* show storedata card when marker hovered -
                      source: https://docs.mapbox.com/mapbox-gl-js/example/popup/ */
                     marker.addEventListener('mouseenter', () => {
-                        
                         const popup = new mapboxgl.Popup({ closeOnClick: false })
                             .setLngLat(store.geometry.coordinates)
                             .setHTML(   `<h1>${store.properties.name}</h1>`) 
@@ -208,19 +209,6 @@
 
             addZoomButtons(map) {
                 map.addControl(new mapboxgl.NavigationControl());
-            },
-
-            addUserLocation(map) {
-                // source: https://docs.mapbox.com/mapbox-gl-js/example/locate-user/
-                map.addControl(
-                    new mapboxgl.GeolocateControl({
-                    positionOptions: {
-                        enableHighAccuracy: true,
-                    },
-                    trackUserLocation: true,
-                    showUserHeading: true   // show arrow for users direction
-                    })
-                );
             }
         }
     }

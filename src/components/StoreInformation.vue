@@ -8,6 +8,7 @@
 
 <script>
     export default {
+        // use props to display different info about the store
         props: {
             informationType: {
                 type: String
@@ -20,8 +21,6 @@
             imageSource: {
                 type: String
             },
-
-
 
             alterrnativeText: {
                 type: String
